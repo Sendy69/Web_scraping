@@ -20,14 +20,25 @@ def get_lawyer(url):
     avocats = bs.find_all("div", class_="callout secondary annuaire-single")
     
     for avocat in avocats:
+        try:
+            nom = avocat.find("h3", class_="nom-prenom").text.strip()
+        except AttributeError as e:
+            nom = ""
+        try:
+            adresse = avocat.find("span", class_= "adresse").text.strip()
+            adresse_final = re.sub(r"\s+", " ", adresse)
+        except AttributeError as e:
+            adresse_final = ""
 
-        nom = avocat.find("h3", class_="nom-prenom").text.strip()
-        adresse = avocat.find("span", class_= "adresse").text.strip()
-        adresse_final = re.sub(r"\s+", " ", adresse)
-        telephone = avocat.find("span", class_= "telephone").text.strip()
-        mail = avocat.find("span", class_= "email").a.text.strip()
-
-        chemin = r"C:\Users\sandr\Documents\Learning\Web scraping\Web_scraping"
+        try:
+            telephone = avocat.find("span", class_= "telephone").text.strip()
+        except AttributeError as e:
+            telephone = ""
+        try:    
+            mail = avocat.find("span", class_= "email").a.text.strip()
+        except AttributeError as e:
+            mail = ""
+        chemin = r"C:\Users\sandr\Documents\Learning\Web scraping\Web_scraping\annuaire_avocats.txt"
         
         with open(chemin, "a") as f:
             f.write(f"{nom}\n")
